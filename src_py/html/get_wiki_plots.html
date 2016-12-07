@@ -1,0 +1,190 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+
+<html>
+<head>
+  <title></title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <style type="text/css">
+td.linenos { background-color: #f0f0f0; padding-right: 10px; }
+span.lineno { background-color: #f0f0f0; padding: 0 5px 0 5px; }
+pre { line-height: 125%; }
+body .hll { background-color: #ffffcc }
+body  { background: #f8f8f8; }
+body .c { color: #408080; font-style: italic } /* Comment */
+body .err { border: 1px solid #FF0000 } /* Error */
+body .k { color: #008000; font-weight: bold } /* Keyword */
+body .o { color: #666666 } /* Operator */
+body .ch { color: #408080; font-style: italic } /* Comment.Hashbang */
+body .cm { color: #408080; font-style: italic } /* Comment.Multiline */
+body .cp { color: #BC7A00 } /* Comment.Preproc */
+body .cpf { color: #408080; font-style: italic } /* Comment.PreprocFile */
+body .c1 { color: #408080; font-style: italic } /* Comment.Single */
+body .cs { color: #408080; font-style: italic } /* Comment.Special */
+body .gd { color: #A00000 } /* Generic.Deleted */
+body .ge { font-style: italic } /* Generic.Emph */
+body .gr { color: #FF0000 } /* Generic.Error */
+body .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+body .gi { color: #00A000 } /* Generic.Inserted */
+body .go { color: #888888 } /* Generic.Output */
+body .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+body .gs { font-weight: bold } /* Generic.Strong */
+body .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+body .gt { color: #0044DD } /* Generic.Traceback */
+body .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+body .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+body .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+body .kp { color: #008000 } /* Keyword.Pseudo */
+body .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+body .kt { color: #B00040 } /* Keyword.Type */
+body .m { color: #666666 } /* Literal.Number */
+body .s { color: #BA2121 } /* Literal.String */
+body .na { color: #7D9029 } /* Name.Attribute */
+body .nb { color: #008000 } /* Name.Builtin */
+body .nc { color: #0000FF; font-weight: bold } /* Name.Class */
+body .no { color: #880000 } /* Name.Constant */
+body .nd { color: #AA22FF } /* Name.Decorator */
+body .ni { color: #999999; font-weight: bold } /* Name.Entity */
+body .ne { color: #D2413A; font-weight: bold } /* Name.Exception */
+body .nf { color: #0000FF } /* Name.Function */
+body .nl { color: #A0A000 } /* Name.Label */
+body .nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+body .nt { color: #008000; font-weight: bold } /* Name.Tag */
+body .nv { color: #19177C } /* Name.Variable */
+body .ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+body .w { color: #bbbbbb } /* Text.Whitespace */
+body .mb { color: #666666 } /* Literal.Number.Bin */
+body .mf { color: #666666 } /* Literal.Number.Float */
+body .mh { color: #666666 } /* Literal.Number.Hex */
+body .mi { color: #666666 } /* Literal.Number.Integer */
+body .mo { color: #666666 } /* Literal.Number.Oct */
+body .sb { color: #BA2121 } /* Literal.String.Backtick */
+body .sc { color: #BA2121 } /* Literal.String.Char */
+body .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+body .s2 { color: #BA2121 } /* Literal.String.Double */
+body .se { color: #BB6622; font-weight: bold } /* Literal.String.Escape */
+body .sh { color: #BA2121 } /* Literal.String.Heredoc */
+body .si { color: #BB6688; font-weight: bold } /* Literal.String.Interpol */
+body .sx { color: #008000 } /* Literal.String.Other */
+body .sr { color: #BB6688 } /* Literal.String.Regex */
+body .s1 { color: #BA2121 } /* Literal.String.Single */
+body .ss { color: #19177C } /* Literal.String.Symbol */
+body .bp { color: #008000 } /* Name.Builtin.Pseudo */
+body .vc { color: #19177C } /* Name.Variable.Class */
+body .vg { color: #19177C } /* Name.Variable.Global */
+body .vi { color: #19177C } /* Name.Variable.Instance */
+body .il { color: #666666 } /* Literal.Number.Integer.Long */
+
+  </style>
+</head>
+<body>
+<h2></h2>
+
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">wikipedia</span><span class="o">,</span> <span class="nn">unicodedata</span>
+<span class="kn">import</span> <span class="nn">file_save_load</span> <span class="kn">as</span> <span class="nn">fsl</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+
+<span class="n">fileName</span> <span class="o">=</span> <span class="s1">&#39;imdb_dataset_v7_no_plots&#39;</span>
+<span class="n">actors_amount</span> <span class="o">=</span> <span class="mi">6</span>
+
+<span class="n">movies</span> <span class="o">=</span> <span class="n">fsl</span><span class="o">.</span><span class="n">read_from_file</span><span class="p">(</span><span class="n">fileName</span><span class="p">,</span> <span class="n">actors_amount</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">compute_jaccard_index</span><span class="p">(</span><span class="n">list_1</span><span class="p">,</span> <span class="n">list_2</span><span class="p">):</span>
+    <span class="n">list_1</span> <span class="o">=</span> <span class="n">list_1</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;(&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;)&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">list_2</span> <span class="o">=</span> <span class="n">list_2</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;(&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;)&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">set_1</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">list_1</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+    <span class="n">set_2</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">list_2</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+    <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">set_1</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">set_2</span><span class="p">))</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">set_1</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">set_2</span><span class="p">)))</span>
+
+<span class="n">movies_with_no_plot</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">wiki_no_plot</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">wiki_plot_ok</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">title</span> <span class="ow">in</span> <span class="n">movies</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">movies</span><span class="p">[</span><span class="n">title</span><span class="p">][</span><span class="s2">&quot;plot&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;no_info&quot;</span><span class="p">:</span>
+        <span class="n">full_title</span> <span class="o">=</span> <span class="n">title</span>
+        <span class="n">title_no_year</span> <span class="o">=</span> <span class="n">title</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot;(&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">movies_with_no_plot</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">title_no_year</span><span class="p">,</span> <span class="n">full_title</span><span class="p">])</span>
+<span class="k">print</span> <span class="s2">&quot;movies with no plot:&quot;</span> <span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">movies_with_no_plot</span><span class="p">)</span>
+<span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="c1"># f = open(&#39;files/_additional_plot_from_wiki&#39;,&#39;a&#39;,0)</span>
+
+<span class="k">for</span> <span class="n">title</span> <span class="ow">in</span> <span class="n">movies_with_no_plot</span><span class="p">:</span>
+
+    <span class="n">title_no_year</span> <span class="o">=</span> <span class="n">title</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">full_title</span> <span class="o">=</span> <span class="n">title</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">title_film</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">title_no_year</span> <span class="o">+</span> <span class="s2">&quot;(film)&quot;</span><span class="p">)</span>
+    <span class="n">year</span> <span class="o">=</span> <span class="n">title</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot;(&quot;</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">year</span> <span class="o">=</span> <span class="n">year</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;(&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">year</span> <span class="o">=</span> <span class="n">year</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;)&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">search_results</span> <span class="o">=</span> <span class="n">wikipedia</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">title_film</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s2">&quot;Error on search_results&quot;</span>
+        <span class="n">search_results</span> <span class="o">=</span><span class="p">[]</span>
+        <span class="n">current_query</span> <span class="o">=</span> <span class="s2">&quot;no_results&quot;</span>
+
+    <span class="n">search_results</span> <span class="o">=</span> <span class="p">[</span><span class="n">unicodedata</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="s1">&#39;NFKD&#39;</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;ascii&#39;</span><span class="p">,</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">search_results</span><span class="p">]</span>
+
+    <span class="k">print</span> <span class="s2">&quot;search_results for</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">title_film</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\t\t</span><span class="s2">&quot;</span> <span class="p">,</span><span class="n">search_results</span>
+
+    <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">search_results</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">compute_jaccard_index</span><span class="p">(</span><span class="n">title_film</span><span class="p">,</span><span class="n">result</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">current_query</span> <span class="o">=</span> <span class="n">result</span>
+            <span class="k">break</span>
+        <span class="k">elif</span> <span class="n">compute_jaccard_index</span><span class="p">(</span><span class="n">title_no_year</span><span class="p">,</span><span class="n">result</span><span class="p">)</span> <span class="o">&gt;=</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">current_query</span> <span class="o">=</span> <span class="n">result</span>
+            <span class="k">break</span>
+        <span class="k">elif</span> <span class="n">compute_jaccard_index</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">title_no_year</span> <span class="o">+</span> <span class="s2">&quot; (&quot;</span> <span class="o">+</span> <span class="n">year</span> <span class="o">+</span> <span class="s2">&quot; film&quot;</span> <span class="o">+</span> <span class="s2">&quot;)&quot;</span><span class="p">),</span><span class="n">result</span><span class="p">)</span> <span class="o">&gt;=</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">current_query</span> <span class="o">=</span> <span class="n">result</span>
+            <span class="k">break</span>
+        <span class="c1"># elif &quot;film&quot; in result:</span>
+        <span class="c1">#     current_query = result</span>
+        <span class="c1">#     break</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">current_query</span> <span class="o">=</span> <span class="s2">&quot;no_results&quot;</span>
+
+    <span class="k">print</span> <span class="s2">&quot;current_query:</span><span class="se">\t\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">current_query</span> <span class="p">,</span> <span class="s2">&quot;/ for movie: &quot;</span><span class="p">,</span> <span class="n">full_title</span>
+
+    <span class="k">if</span> <span class="n">current_query</span> <span class="o">!=</span> <span class="s2">&quot;no_results&quot;</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">movie_page</span> <span class="o">=</span> <span class="n">wikipedia</span><span class="o">.</span><span class="n">page</span><span class="p">(</span><span class="n">current_query</span><span class="p">)</span>
+            <span class="n">go_flag</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s2">&quot;PLOT------DisambiguationError for:&quot;</span><span class="p">,</span> <span class="n">full_title</span>
+            <span class="n">go_flag</span> <span class="o">=</span> <span class="bp">False</span>
+
+        <span class="k">if</span> <span class="n">go_flag</span><span class="p">:</span>
+            <span class="n">section_results</span> <span class="o">=</span> <span class="p">[</span><span class="n">unicodedata</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="s1">&#39;NFKD&#39;</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;ascii&#39;</span><span class="p">,</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">movie_page</span><span class="o">.</span><span class="n">sections</span><span class="p">]</span>
+            <span class="c1"># f.write(str(full_title + &quot;\t&quot; + current_query + &quot;\t&quot; + str(search_results) + &quot;\n&quot;))</span>
+            <span class="k">print</span> <span class="s2">&quot;sections for</span><span class="se">\t\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">current_query</span><span class="p">,</span> <span class="n">section_results</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="k">if</span> <span class="s2">&quot;Plot&quot;</span> <span class="ow">in</span> <span class="n">section_results</span><span class="p">:</span>
+                <span class="c1"># print movie_page.section(&quot;Plot&quot;).replace(&quot;\n&quot;,&quot; &quot;)</span>
+                <span class="c1"># plot = movie_page.section(&quot;Plot&quot;)</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">wiki_plot_ok</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">movie_page</span><span class="o">.</span><span class="n">section</span><span class="p">(</span><span class="s2">&quot;Plot&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span><span class="s2">&quot; &quot;</span><span class="p">),</span><span class="n">full_title</span><span class="p">])</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="k">print</span> <span class="s2">&quot;NoneTpye error&quot;</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">wiki_no_plot</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="s2">&quot;no_info_query&quot;</span><span class="p">,</span> <span class="n">full_title</span><span class="p">])</span>
+
+    <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">print</span> <span class="s2">&quot;Done with:&quot;</span><span class="p">,</span><span class="n">counter</span><span class="p">,</span><span class="s2">&quot;/&quot;</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">movies_with_no_plot</span><span class="p">)</span>
+
+
+<span class="k">print</span> <span class="s2">&quot;PLOT:</span><span class="se">\t</span><span class="s2">movies with info:&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">wiki_plot_ok</span><span class="p">),</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">movies no info:&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">wiki_no_plot</span><span class="p">),</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">all movies with no info:&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">movies_with_no_plot</span><span class="p">)</span>
+
+<span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;files/_wiki_plot_for_&#39;</span> <span class="o">+</span> <span class="n">fileName</span><span class="p">,</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
+<span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%c</span><span class="s2">&quot;</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;PLOT:</span><span class="se">\t</span><span class="s2">movies with info:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">wiki_plot_ok</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">movies no info:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">wiki_no_plot</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">all movies with no info:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">movies_with_no_plot</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">wiki_plot_ok</span><span class="p">:</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</body>
+</html>
