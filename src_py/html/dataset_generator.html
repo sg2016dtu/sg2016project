@@ -1,0 +1,676 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+
+<html>
+<head>
+  <title></title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <style type="text/css">
+td.linenos { background-color: #f0f0f0; padding-right: 10px; }
+span.lineno { background-color: #f0f0f0; padding: 0 5px 0 5px; }
+pre { line-height: 125%; }
+body .hll { background-color: #ffffcc }
+body  { background: #f8f8f8; }
+body .c { color: #408080; font-style: italic } /* Comment */
+body .err { border: 1px solid #FF0000 } /* Error */
+body .k { color: #008000; font-weight: bold } /* Keyword */
+body .o { color: #666666 } /* Operator */
+body .ch { color: #408080; font-style: italic } /* Comment.Hashbang */
+body .cm { color: #408080; font-style: italic } /* Comment.Multiline */
+body .cp { color: #BC7A00 } /* Comment.Preproc */
+body .cpf { color: #408080; font-style: italic } /* Comment.PreprocFile */
+body .c1 { color: #408080; font-style: italic } /* Comment.Single */
+body .cs { color: #408080; font-style: italic } /* Comment.Special */
+body .gd { color: #A00000 } /* Generic.Deleted */
+body .ge { font-style: italic } /* Generic.Emph */
+body .gr { color: #FF0000 } /* Generic.Error */
+body .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+body .gi { color: #00A000 } /* Generic.Inserted */
+body .go { color: #888888 } /* Generic.Output */
+body .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+body .gs { font-weight: bold } /* Generic.Strong */
+body .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+body .gt { color: #0044DD } /* Generic.Traceback */
+body .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+body .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+body .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+body .kp { color: #008000 } /* Keyword.Pseudo */
+body .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+body .kt { color: #B00040 } /* Keyword.Type */
+body .m { color: #666666 } /* Literal.Number */
+body .s { color: #BA2121 } /* Literal.String */
+body .na { color: #7D9029 } /* Name.Attribute */
+body .nb { color: #008000 } /* Name.Builtin */
+body .nc { color: #0000FF; font-weight: bold } /* Name.Class */
+body .no { color: #880000 } /* Name.Constant */
+body .nd { color: #AA22FF } /* Name.Decorator */
+body .ni { color: #999999; font-weight: bold } /* Name.Entity */
+body .ne { color: #D2413A; font-weight: bold } /* Name.Exception */
+body .nf { color: #0000FF } /* Name.Function */
+body .nl { color: #A0A000 } /* Name.Label */
+body .nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+body .nt { color: #008000; font-weight: bold } /* Name.Tag */
+body .nv { color: #19177C } /* Name.Variable */
+body .ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+body .w { color: #bbbbbb } /* Text.Whitespace */
+body .mb { color: #666666 } /* Literal.Number.Bin */
+body .mf { color: #666666 } /* Literal.Number.Float */
+body .mh { color: #666666 } /* Literal.Number.Hex */
+body .mi { color: #666666 } /* Literal.Number.Integer */
+body .mo { color: #666666 } /* Literal.Number.Oct */
+body .sb { color: #BA2121 } /* Literal.String.Backtick */
+body .sc { color: #BA2121 } /* Literal.String.Char */
+body .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+body .s2 { color: #BA2121 } /* Literal.String.Double */
+body .se { color: #BB6622; font-weight: bold } /* Literal.String.Escape */
+body .sh { color: #BA2121 } /* Literal.String.Heredoc */
+body .si { color: #BB6688; font-weight: bold } /* Literal.String.Interpol */
+body .sx { color: #008000 } /* Literal.String.Other */
+body .sr { color: #BB6688 } /* Literal.String.Regex */
+body .s1 { color: #BA2121 } /* Literal.String.Single */
+body .ss { color: #19177C } /* Literal.String.Symbol */
+body .bp { color: #008000 } /* Name.Builtin.Pseudo */
+body .vc { color: #19177C } /* Name.Variable.Class */
+body .vg { color: #19177C } /* Name.Variable.Global */
+body .vi { color: #19177C } /* Name.Variable.Instance */
+body .il { color: #666666 } /* Literal.Number.Integer.Long */
+
+  </style>
+</head>
+<body>
+<h2></h2>
+
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">csv</span><span class="o">,</span> <span class="nn">helpers</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">imdb_parser</span>
+<span class="kn">import</span> <span class="nn">file_save_load</span> <span class="kn">as</span> <span class="nn">fsl</span>
+
+<span class="n">movies</span> <span class="o">=</span><span class="p">{}</span>
+<span class="n">movies_amount</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="n">actors_amount</span> <span class="o">=</span> <span class="mi">6</span>
+
+<span class="n">rejectes_movies</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;IMDB_files_link/_filtered_data/movies.filtered&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">data_file</span><span class="p">:</span>
+    <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">data_file</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\r</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">reader</span><span class="p">:</span>
+        <span class="c1"># line variable here is a list of strings, so we join it into one string</span>
+        <span class="n">full_line</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="c1"># partition returns 3-tuple: (part_before_delimiter, delimiter, part_after_delimiter)</span>
+        <span class="n">parted</span> <span class="o">=</span> <span class="n">full_line</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">title</span> <span class="o">=</span> <span class="n">parted</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c1"># in the part_after_delimiter we delete all \t characters</span>
+        <span class="n">year</span> <span class="o">=</span> <span class="n">parted</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="c1"># check year validity</span>
+        <span class="k">if</span> <span class="n">year</span> <span class="o">!=</span> <span class="s2">&quot;????&quot;</span> <span class="ow">and</span> <span class="nb">int</span><span class="p">(</span><span class="n">year</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">1986</span><span class="p">:</span>
+            <span class="n">movies</span><span class="p">[</span><span class="n">title</span><span class="p">]</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;year&quot;</span><span class="p">:</span> <span class="n">year</span><span class="p">}</span>
+        <span class="c1"># else:</span>
+        <span class="c1">#     rejectes_movies.append([title,&quot;on_year&quot;])</span>
+        <span class="n">movies_amount</span> <span class="o">+=</span> <span class="mi">1</span>
+
+<span class="k">print</span> <span class="n">movies_amount</span><span class="p">,</span> <span class="s2">&quot;all movies&quot;</span>
+<span class="k">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">movies</span><span class="p">),</span> <span class="s2">&quot;movies amount after year filter&quot;</span>
+
+<span class="c1">######################################################</span>
+<span class="c1">#               language filtering</span>
+<span class="c1">######################################################</span>
+
+<span class="n">movies_with_languages</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;IMDB_files_link/_filtered_data/language.filtered&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">data_file</span><span class="p">:</span>
+    <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">data_file</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\r</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">reader</span><span class="p">:</span>
+        <span class="c1"># line variable here is a list of strings, so we join it into one string</span>
+        <span class="n">full_line</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="c1"># partition returns 3-tuple: (part_before_delimiter, delimiter, part_after_delimiter)</span>
+        <span class="n">parted</span> <span class="o">=</span> <span class="n">full_line</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">title</span> <span class="o">=</span> <span class="n">parted</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c1"># in the part_after_delimiter we delete all \t characters</span>
+        <span class="n">language</span> <span class="o">=</span> <span class="n">parted</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="c1"># this is because some movies like Avatar (2009) have more than one language</span>
+        <span class="k">if</span> <span class="n">title</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">movies_with_languages</span><span class="p">:</span>
+            <span class="n">movies_with_languages</span><span class="p">[</span><span class="n">title</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">language</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">movies_with_languages</span><span class="p">[</span><span class="n">title</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">language</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">title</span> <span class="ow">in</span> <span class="n">movies_with_languages</span><span class="p">:</span>
+    <span class="n">languages</span> <span class="o">=</span> <span class="n">movies_with_languages</span><span class="p">[</span><span class="n">title</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">language</span> <span class="ow">in</span> <span class="n">languages</span><span class="p">:</span>
+        <span class="c1"># if one of the languages of the movie is not english delete its entry from movies</span>
+        <span class="c1"># there are different language descriptions in the language.list</span>
+        <span class="c1"># like for example: English (English Subtitles), English    (Original Version) etc</span>
+        <span class="k">if</span> <span class="n">language</span> <span class="o">==</span> <span class="s2">&quot;English&quot;</span> \
+                <span class="ow">or</span> <span class="n">language</span> <span class="o">==</span> <span class="s2">&quot;English (English Subtitles)&quot;</span> \
+                <span class="ow">or</span> <span class="n">language</span> <span class="o">==</span> <span class="s2">&quot;English(English subtitles)&quot;</span> \
+                <span class="ow">or</span> <span class="n">language</span> <span class="o">==</span> <span class="s2">&quot;English (Original Version)&quot;</span> \
+                <span class="ow">or</span> <span class="n">language</span> <span class="o">==</span> <span class="s2">&quot;English(Original version)&quot;</span> \
+                <span class="ow">or</span> <span class="n">language</span> <span class="o">==</span> <span class="s2">&quot;English(original version)&quot;</span> \
+                <span class="ow">or</span> <span class="n">language</span> <span class="o">==</span> <span class="s2">&quot;English(US)&quot;</span> \
+                <span class="ow">or</span> <span class="n">language</span> <span class="o">==</span> <span class="s2">&quot;English(United States)&quot;</span> \
+                <span class="ow">or</span> <span class="n">language</span> <span class="o">==</span> <span class="s2">&quot;English(original text)&quot;</span> \
+                <span class="ow">or</span> <span class="n">language</span> <span class="o">==</span> <span class="s2">&quot;English (English Version)&quot;</span><span class="p">:</span>
+            <span class="k">break</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">movies</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+            <span class="c1"># rejectes_movies.append([title, &quot;on_lang&quot;])</span>
+
+<span class="k">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">movies</span><span class="p">),</span> <span class="s2">&quot;movies amount after language filter&quot;</span>
+
+<span class="c1">######################################################</span>
+<span class="c1">#               ratings filtering</span>
+<span class="c1">######################################################</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;IMDB_files_link/_filtered_data/ratings.filtered&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">data_file</span><span class="p">:</span>
+    <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">data_file</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\r</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">reader</span><span class="p">:</span>
+        <span class="c1"># line variable here is a list of strings, so we join it into one string</span>
+        <span class="n">full_line</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="c1"># We split the string back into list but double white space delimiter,</span>
+        <span class="c1"># since column values have different lenghts.</span>
+        <span class="c1"># Now we easily know which index element is what</span>
+        <span class="c1"># This is how each entry will look after split:</span>
+        <span class="c1"># [&#39;&#39;, &#39;2012000000&#39;, &#39;72&#39;, &#39;3.7&#39;, &#39;Ashbah (2014)&#39;]</span>
+        <span class="c1"># [&#39;&#39;, &#39;0..0.12103&#39;, &#39;23&#39;, &#39;7.7&#39;, &#39;Ashbah Beyrouth (1998)&#39;]</span>
+        <span class="n">rating_data</span> <span class="o">=</span> <span class="n">full_line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;  &quot;</span><span class="p">)</span>
+        <span class="n">title</span> <span class="o">=</span> <span class="n">rating_data</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+        <span class="n">rating</span> <span class="o">=</span> <span class="n">rating_data</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+        <span class="n">votes</span> <span class="o">=</span> <span class="n">rating_data</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">title</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">movies</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">movies</span><span class="p">[</span><span class="n">title</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>  <span class="s2">&quot;votes&quot;</span><span class="p">:</span> <span class="n">votes</span><span class="p">,</span>
+                                    <span class="s2">&quot;rating&quot;</span><span class="p">:</span> <span class="n">rating</span><span class="p">})</span>
+
+<span class="k">for</span> <span class="n">title</span> <span class="ow">in</span> <span class="n">movies</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+    <span class="k">if</span> <span class="s2">&quot;rating&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">movies</span><span class="p">[</span><span class="n">title</span><span class="p">]:</span>
+        <span class="n">movies</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="c1"># rejectes_movies.append([title, &quot;on_rating&quot;])</span>
+
+<span class="k">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">movies</span><span class="p">),</span> <span class="s2">&quot;amount of movies that have rating&quot;</span>
+
+<span class="c1">######################################################</span>
+<span class="c1">#               director filtering</span>
+<span class="c1">######################################################</span>
+
+<span class="n">directors_raw</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;IMDB_files_link/_filtered_data/directors.filtered&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">data_file</span><span class="p">:</span>
+    <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">data_file</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">reader</span><span class="p">:</span>
+        <span class="n">full_line</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="n">directors_raw</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">full_line</span><span class="p">)</span>
+
+<span class="n">directors_less_raw</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="n">temp</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">directors_raw</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">line</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+        <span class="n">temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># only add direcotrs that have movies listed</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">directors_less_raw</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="n">movie_and_its_director</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">directors_less_raw</span><span class="p">:</span>
+    <span class="n">director</span> <span class="o">=</span> <span class="n">entry</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="s2">&quot;,&quot;</span> <span class="ow">in</span> <span class="n">director</span><span class="p">:</span>
+        <span class="n">parted</span> <span class="o">=</span> <span class="n">director</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot;, &quot;</span><span class="p">)</span>
+        <span class="c1"># first name then surname</span>
+        <span class="n">director</span> <span class="o">=</span> <span class="n">parted</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">parted</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">film</span> <span class="ow">in</span> <span class="n">entry</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="nb">len</span><span class="p">(</span><span class="n">entry</span><span class="p">)]:</span>
+        <span class="n">movie_name</span> <span class="o">=</span> <span class="n">film</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot;  &quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">movie_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">movie_and_its_director</span><span class="p">:</span>
+            <span class="n">movie_and_its_director</span><span class="p">[</span><span class="n">movie_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;director&quot;</span><span class="p">:[</span><span class="n">director</span><span class="p">]}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">movie_and_its_director</span><span class="p">[</span><span class="n">movie_name</span><span class="p">][</span><span class="s2">&quot;director&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">director</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">title</span> <span class="ow">in</span> <span class="n">movie_and_its_director</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">title</span> <span class="ow">in</span> <span class="n">movies</span><span class="p">:</span>
+        <span class="n">movies</span><span class="p">[</span><span class="n">title</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;director&quot;</span><span class="p">:</span> <span class="n">movie_and_its_director</span><span class="p">[</span><span class="n">title</span><span class="p">][</span><span class="s2">&quot;director&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]})</span>
+
+<span class="k">for</span> <span class="n">title</span> <span class="ow">in</span> <span class="n">movies</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+    <span class="k">if</span> <span class="s2">&quot;director&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">movies</span><span class="p">[</span><span class="n">title</span><span class="p">]:</span>
+        <span class="n">movies</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="n">rejectes_movies</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">title</span><span class="p">,</span><span class="s2">&quot;on_dir&quot;</span><span class="p">])</span>
+
+<span class="c1"># print &quot;memory then&quot;,helpers.memory()</span>
+<span class="c1"># free up some memory</span>
+<span class="k">del</span> <span class="n">movie_and_its_director</span><span class="p">,</span> <span class="n">directors_raw</span><span class="p">,</span> <span class="n">directors_less_raw</span><span class="p">,</span> <span class="n">temp</span>
+<span class="c1"># print &quot;memory now&quot;,helpers.memory()</span>
+
+<span class="k">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">movies</span><span class="p">),</span> <span class="s2">&quot;amount of movies that have directors&quot;</span>
+
+<span class="c1">######################################################</span>
+<span class="c1">#               genre filtering</span>
+<span class="c1">######################################################</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;IMDB_files_link/_filtered_data/genres.filtered&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">data_file</span><span class="p">:</span>
+    <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">data_file</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\r</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">reader</span><span class="p">:</span>
+        <span class="c1"># line variable here is a list of strings, so we join it into one string</span>
+        <span class="n">full_line</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="c1"># partition returns 3-tuple: (part_before_delimiter, delimiter, part_after_delimiter)</span>
+        <span class="n">parted</span> <span class="o">=</span> <span class="n">full_line</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">title</span> <span class="o">=</span> <span class="n">parted</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c1"># in the part_after_delimiter we delete all \t characters</span>
+        <span class="n">genre</span> <span class="o">=</span> <span class="n">parted</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">title</span> <span class="ow">in</span> <span class="n">movies</span><span class="p">:</span>
+            <span class="n">movies</span><span class="p">[</span><span class="n">title</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;genre&quot;</span><span class="p">:</span> <span class="n">genre</span><span class="p">})</span>
+
+<span class="k">for</span> <span class="n">title</span> <span class="ow">in</span> <span class="n">movies</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+    <span class="k">if</span> <span class="s2">&quot;genre&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">movies</span><span class="p">[</span><span class="n">title</span><span class="p">]:</span>
+        <span class="n">movies</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="n">rejectes_movies</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">title</span><span class="p">,</span><span class="s2">&quot;on_genre&quot;</span><span class="p">])</span>
+
+<span class="k">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">movies</span><span class="p">),</span> <span class="s2">&quot;amount of movies that have genre&quot;</span>
+
+<span class="c1">######################################################</span>
+<span class="c1">#                business filtering</span>
+<span class="c1">######################################################</span>
+
+<span class="n">business_raw</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;IMDB_files_link/_filtered_data/business.filtered&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">data_file</span><span class="p">:</span>
+    <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">data_file</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">reader</span><span class="p">:</span>
+        <span class="n">full_line</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="n">business_raw</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">full_line</span><span class="p">)</span>
+
+<span class="n">business_less_raw</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">temp</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">business_raw</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">line</span> <span class="o">!=</span> <span class="s2">&quot;----&quot;</span><span class="p">:</span>
+        <span class="n">temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">business_less_raw</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="n">movies_with_values</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">mandatory_count</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">gr_count</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">temp</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">movie</span> <span class="ow">in</span> <span class="n">business_less_raw</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">movie</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">&quot;MV&quot;</span> <span class="ow">in</span> <span class="n">entry</span><span class="p">:</span>
+            <span class="n">temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>
+            <span class="n">mandatory_count</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="s2">&quot;BT&quot;</span> <span class="ow">in</span> <span class="n">entry</span><span class="p">:</span>                     <span class="c1">#uncomment to have movies with budget only</span>
+            <span class="n">temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>                <span class="c1">#comment to have movies without budget</span>
+            <span class="n">mandatory_count</span> <span class="o">+=</span> <span class="mi">1</span>              <span class="c1">#</span>
+        <span class="k">if</span> <span class="s2">&quot;GR&quot;</span> <span class="ow">in</span> <span class="n">entry</span><span class="p">:</span>
+            <span class="n">temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>
+            <span class="n">gr_count</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="c1"># if &quot;RT&quot; in entry:</span>
+        <span class="c1">#     temp.append(entry)</span>
+        <span class="c1">#     mandatory_count += 1</span>
+    <span class="k">if</span> <span class="n">mandatory_count</span> <span class="o">&gt;=</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">gr_count</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>   <span class="c1"># change first condition to 2 if wanna have budget, 1 otherwise</span>
+        <span class="n">movies_with_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span>
+    <span class="n">temp</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">mandatory_count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">gr_count</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="n">budget_temp</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">gross_temp</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+<span class="k">for</span> <span class="n">movie</span> <span class="ow">in</span> <span class="n">movies_with_values</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">movie</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">&quot;MV&quot;</span> <span class="ow">in</span> <span class="n">entry</span><span class="p">:</span>
+            <span class="n">title</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot;MV: &quot;</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="s2">&quot;BT&quot;</span> <span class="ow">in</span> <span class="n">entry</span><span class="p">:</span>
+            <span class="n">bt</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot;BT: &quot;</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="n">budget_temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bt</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="s2">&quot;GR&quot;</span> <span class="ow">in</span> <span class="n">entry</span><span class="p">:</span>
+            <span class="n">gr</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot;GR: &quot;</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="n">gross_temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">gr</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">title</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span> <span class="ow">and</span> <span class="n">title</span> <span class="ow">in</span> <span class="n">movies</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">budget_temp</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">movies</span><span class="p">[</span><span class="n">title</span><span class="p">][</span><span class="s2">&quot;rating&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">6</span><span class="p">:</span>
+            <span class="n">movies</span><span class="p">[</span><span class="n">title</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;budget&quot;</span><span class="p">:</span> <span class="s2">&quot;no_info&quot;</span><span class="p">,</span> <span class="s2">&quot;gross&quot;</span><span class="p">:</span> <span class="n">gross_temp</span><span class="p">})</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">movies</span><span class="p">[</span><span class="n">title</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;budget&quot;</span><span class="p">:</span> <span class="n">budget_temp</span><span class="p">,</span> <span class="s2">&quot;gross&quot;</span><span class="p">:</span> <span class="n">gross_temp</span><span class="p">})</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">budget_temp</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">gross_temp</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">title</span> <span class="ow">in</span> <span class="n">movies</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+    <span class="k">if</span> <span class="s2">&quot;gross&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">movies</span><span class="p">[</span><span class="n">title</span><span class="p">]:</span>
+        <span class="n">movies</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+
+<span class="n">small_wide_temp</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">big_wide_temp</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">usa_temp</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">other_temp</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">title</span> <span class="ow">in</span> <span class="n">movies</span><span class="p">:</span>
+    <span class="n">all_gross</span> <span class="o">=</span> <span class="n">movies</span><span class="p">[</span><span class="n">title</span><span class="p">][</span><span class="s2">&quot;gross&quot;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">gross</span> <span class="ow">in</span> <span class="n">all_gross</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;(worldwide)&quot;</span> <span class="ow">in</span> <span class="n">gross</span><span class="p">:</span>
+                <span class="n">gross_temp</span> <span class="o">=</span> <span class="n">gross</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot; (worldwide)&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">if</span> <span class="s2">&quot;GBP&quot;</span> <span class="ow">in</span> <span class="n">gross_temp</span><span class="p">:</span>
+                    <span class="n">gross_temp</span> <span class="o">=</span> <span class="n">gross_temp</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot;GBP &quot;</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span>
+                    <span class="n">gross_temp</span> <span class="o">=</span> <span class="n">gross_temp</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+                    <span class="n">small_wide_temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">gross_temp</span><span class="p">)</span><span class="o">*</span><span class="mf">1.25</span><span class="p">,</span> <span class="mi">0</span><span class="p">)))</span>
+                <span class="k">elif</span> <span class="s2">&quot;USD&quot;</span> <span class="ow">in</span> <span class="n">gross_temp</span><span class="p">:</span>
+                    <span class="n">gross_temp</span> <span class="o">=</span> <span class="n">gross_temp</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot;USD &quot;</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span>
+                    <span class="n">gross_temp</span> <span class="o">=</span> <span class="n">gross_temp</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+                    <span class="n">small_wide_temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">gross_temp</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">gross_temp</span> <span class="o">=</span> <span class="n">gross_temp</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span>
+                    <span class="n">gross_temp</span> <span class="o">=</span> <span class="n">gross_temp</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+                    <span class="n">small_wide_temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">gross_temp</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="s2">&quot;(Worldwide)&quot;</span> <span class="ow">in</span> <span class="n">gross</span><span class="p">:</span>
+                <span class="n">gross_temp</span> <span class="o">=</span> <span class="n">gross</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot; (Worldwide)&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">if</span> <span class="s2">&quot;GBP&quot;</span> <span class="ow">in</span> <span class="n">gross_temp</span><span class="p">:</span>
+                    <span class="n">gross_temp</span> <span class="o">=</span> <span class="n">gross_temp</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot;GBP &quot;</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span>
+                    <span class="n">gross_temp</span> <span class="o">=</span> <span class="n">gross_temp</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+                    <span class="n">big_wide_temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">gross_temp</span><span class="p">)</span><span class="o">*</span><span class="mf">1.25</span><span class="p">,</span> <span class="mi">0</span><span class="p">)))</span>
+                <span class="k">elif</span> <span class="s2">&quot;USD&quot;</span> <span class="ow">in</span> <span class="n">gross_temp</span><span class="p">:</span>
+                    <span class="n">gross_temp</span> <span class="o">=</span> <span class="n">gross_temp</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot;USD &quot;</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span>
+                    <span class="n">gross_temp</span> <span class="o">=</span> <span class="n">gross_temp</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+                    <span class="n">big_wide_temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">gross_temp</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">gross_temp</span> <span class="o">=</span> <span class="n">gross_temp</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span>
+                    <span class="n">gross_temp</span> <span class="o">=</span> <span class="n">gross_temp</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+                    <span class="n">big_wide_temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">gross_temp</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="s2">&quot;(USA)&quot;</span> <span class="ow">in</span> <span class="n">gross</span><span class="p">:</span>
+                <span class="n">gross_temp</span> <span class="o">=</span> <span class="n">gross</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot; (USA)&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">if</span> <span class="s2">&quot;GBP&quot;</span> <span class="ow">in</span> <span class="n">gross_temp</span><span class="p">:</span>
+                    <span class="n">gross_temp</span> <span class="o">=</span> <span class="n">gross_temp</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot;GBP &quot;</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span>
+                    <span class="n">gross_temp</span> <span class="o">=</span> <span class="n">gross_temp</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+                    <span class="n">usa_temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">gross_temp</span><span class="p">)</span><span class="o">*</span><span class="mf">1.25</span><span class="p">,</span> <span class="mi">0</span><span class="p">)))</span>
+                <span class="k">elif</span> <span class="s2">&quot;USD&quot;</span> <span class="ow">in</span> <span class="n">gross_temp</span><span class="p">:</span>
+                    <span class="n">gross_temp</span> <span class="o">=</span> <span class="n">gross_temp</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot;USD &quot;</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span>
+                    <span class="n">gross_temp</span> <span class="o">=</span> <span class="n">gross_temp</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+                    <span class="n">usa_temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">gross_temp</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">gross_temp</span> <span class="o">=</span> <span class="n">gross_temp</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span>
+                    <span class="n">gross_temp</span> <span class="o">=</span> <span class="n">gross_temp</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+                    <span class="n">usa_temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">gross_temp</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">gross_temp</span> <span class="o">=</span> <span class="n">gross</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span>
+                <span class="n">gross_temp</span> <span class="o">=</span> <span class="n">gross_temp</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">gross_temp</span> <span class="o">=</span> <span class="n">gross_temp</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+                <span class="n">other_temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">gross_temp</span><span class="p">))</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">movies</span><span class="p">[</span><span class="n">title</span><span class="p">][</span><span class="s2">&quot;gross&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;no_info&quot;</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">small_wide_temp</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">movies</span><span class="p">[</span><span class="n">title</span><span class="p">][</span><span class="s2">&quot;gross&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">small_wide_temp</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">big_wide_temp</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">movies</span><span class="p">[</span><span class="n">title</span><span class="p">][</span><span class="s2">&quot;gross&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">big_wide_temp</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">usa_temp</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">movies</span><span class="p">[</span><span class="n">title</span><span class="p">][</span><span class="s2">&quot;gross&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">usa_temp</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">other_temp</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">movies</span><span class="p">[</span><span class="n">title</span><span class="p">][</span><span class="s2">&quot;gross&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">other_temp</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">movies</span><span class="p">[</span><span class="n">title</span><span class="p">][</span><span class="s2">&quot;gross&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;no_info&quot;</span>
+
+    <span class="n">small_wide_temp</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">big_wide_temp</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">usa_temp</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">other_temp</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="n">budget_temp</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">title</span> <span class="ow">in</span> <span class="n">movies</span><span class="p">:</span>
+    <span class="n">budgetes</span> <span class="o">=</span> <span class="n">movies</span><span class="p">[</span><span class="n">title</span><span class="p">][</span><span class="s2">&quot;budget&quot;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">budgetes</span> <span class="o">==</span> <span class="s2">&quot;no_info&quot;</span><span class="p">:</span>
+        <span class="n">rejectes_movies</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">title</span><span class="p">,</span> <span class="s2">&quot;on_budg&quot;</span><span class="p">])</span>
+        <span class="k">pass</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">budgetes</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="c1"># print &quot;UNCOORREC&quot;, title, budgetes</span>
+        <span class="k">for</span> <span class="n">bud</span> <span class="ow">in</span> <span class="n">budgetes</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">bud</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                <span class="n">bud_temp</span> <span class="o">=</span> <span class="n">bud</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span>
+                <span class="n">bud_temp</span> <span class="o">=</span> <span class="n">bud_temp</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">bud_temp</span> <span class="o">=</span> <span class="n">bud_temp</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+                <span class="n">bud_temp</span> <span class="o">=</span> <span class="n">bud_temp</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+                <span class="n">budget_temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">bud_temp</span><span class="p">))</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">budget_temp</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">movies</span><span class="p">[</span><span class="n">title</span><span class="p">][</span><span class="s2">&quot;budget&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;no_info&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">movies</span><span class="p">[</span><span class="n">title</span><span class="p">][</span><span class="s2">&quot;budget&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">budget_temp</span><span class="p">)</span>
+        <span class="c1"># print &quot;COORECTED&quot;, title, max(budget_temp)</span>
+        <span class="n">budget_temp</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">del</span> <span class="n">business_raw</span><span class="p">,</span> <span class="n">business_less_raw</span><span class="p">,</span> <span class="n">movies_with_values</span><span class="p">,</span> <span class="n">budget_temp</span><span class="p">,</span> <span class="n">gross_temp</span><span class="p">,</span> <span class="n">temp</span>
+
+<span class="k">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">movies</span><span class="p">),</span> <span class="s2">&quot;amount of movies that have stated business values&quot;</span>
+<span class="c1">######################################################</span>
+<span class="c1">#                top actors filtering</span>
+<span class="c1">######################################################</span>
+
+<span class="n">top_actors</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;IMDB_files_link/_filtered_data/actors.scrapped&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">data_file</span><span class="p">:</span>
+    <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">data_file</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">rank</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">reader</span><span class="p">):</span>
+        <span class="n">_name</span> <span class="o">=</span> <span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">top_actors</span><span class="p">:</span>
+            <span class="n">top_actors</span><span class="p">[</span><span class="n">_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;rank&quot;</span><span class="p">:</span> <span class="n">rank</span> <span class="o">+</span> <span class="mi">1</span><span class="p">}</span>
+
+<span class="c1">######################################################</span>
+<span class="c1">#                actors filtering</span>
+<span class="c1">######################################################</span>
+
+<span class="n">actors_raw</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;IMDB_files_link/_filtered_data/actors.filtered&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">data_file</span><span class="p">:</span>
+    <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">data_file</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">reader</span><span class="p">:</span>
+        <span class="n">full_line</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="n">actors_raw</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">full_line</span><span class="p">)</span>
+
+<span class="n">actors_less_raw</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="n">temp</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">actors_raw</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">line</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+        <span class="n">temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># only add actors that have roles listed</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">actors_less_raw</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="n">movie_and_roles</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">actors_less_raw</span><span class="p">:</span>
+    <span class="n">actor</span> <span class="o">=</span> <span class="n">entry</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="s2">&quot;,&quot;</span> <span class="ow">in</span> <span class="n">actor</span><span class="p">:</span>
+        <span class="n">parted</span> <span class="o">=</span> <span class="n">actor</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot;, &quot;</span><span class="p">)</span>
+        <span class="c1"># first name then surname</span>
+        <span class="c1"># if there is (I) or else in name - delete it</span>
+        <span class="n">name_with_paranth</span> <span class="o">=</span> <span class="n">parted</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s2">&quot;(&quot;</span> <span class="ow">in</span> <span class="n">name_with_paranth</span><span class="p">:</span>
+            <span class="n">clean_name</span> <span class="o">=</span> <span class="n">name_with_paranth</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot; (&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">actor</span> <span class="o">=</span> <span class="n">clean_name</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">parted</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">actor</span> <span class="o">=</span> <span class="n">parted</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">parted</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">role</span> <span class="ow">in</span> <span class="n">entry</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="nb">len</span><span class="p">(</span><span class="n">entry</span><span class="p">)]:</span>
+        <span class="n">movie_name</span> <span class="o">=</span> <span class="n">role</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot;  &quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">movie_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">movie_and_roles</span><span class="p">:</span>
+            <span class="n">movie_and_roles</span><span class="p">[</span><span class="n">movie_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;cast&quot;</span><span class="p">:[{</span><span class="s2">&quot;actor&quot;</span><span class="p">:</span><span class="n">actor</span><span class="p">,</span><span class="s2">&quot;sex&quot;</span><span class="p">:</span> <span class="s2">&quot;M&quot;</span><span class="p">}]}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">movie_and_roles</span><span class="p">[</span><span class="n">movie_name</span><span class="p">][</span><span class="s2">&quot;cast&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;actor&quot;</span><span class="p">:</span><span class="n">actor</span><span class="p">,</span><span class="s2">&quot;sex&quot;</span><span class="p">:</span> <span class="s2">&quot;M&quot;</span><span class="p">})</span>
+
+<span class="n">actors_raw</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;IMDB_files_link/_filtered_data/actresses.filtered&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">data_file</span><span class="p">:</span>
+    <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">data_file</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">reader</span><span class="p">:</span>
+        <span class="n">full_line</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="n">actors_raw</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">full_line</span><span class="p">)</span>
+
+<span class="n">actors_less_raw</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="n">temp</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">actors_raw</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">line</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+        <span class="n">temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># only add actors that have roles listed</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">actors_less_raw</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">actors_less_raw</span><span class="p">:</span>
+    <span class="n">actor</span> <span class="o">=</span> <span class="n">entry</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="s2">&quot;,&quot;</span> <span class="ow">in</span> <span class="n">actor</span><span class="p">:</span>
+        <span class="n">parted</span> <span class="o">=</span> <span class="n">actor</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot;, &quot;</span><span class="p">)</span>
+        <span class="c1"># first name then surname</span>
+        <span class="n">actor</span> <span class="o">=</span> <span class="n">parted</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">parted</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">role</span> <span class="ow">in</span> <span class="n">entry</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="nb">len</span><span class="p">(</span><span class="n">entry</span><span class="p">)]:</span>
+        <span class="n">movie_name</span> <span class="o">=</span> <span class="n">role</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot;  &quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">movie_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">movie_and_roles</span><span class="p">:</span>
+            <span class="n">movie_and_roles</span><span class="p">[</span><span class="n">movie_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;cast&quot;</span><span class="p">:[{</span><span class="s2">&quot;actor&quot;</span><span class="p">:</span><span class="n">actor</span><span class="p">,</span><span class="s2">&quot;sex&quot;</span><span class="p">:</span> <span class="s2">&quot;F&quot;</span><span class="p">}]}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">movie_and_roles</span><span class="p">[</span><span class="n">movie_name</span><span class="p">][</span><span class="s2">&quot;cast&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;actor&quot;</span><span class="p">:</span><span class="n">actor</span><span class="p">,</span><span class="s2">&quot;sex&quot;</span><span class="p">:</span> <span class="s2">&quot;F&quot;</span><span class="p">})</span>
+
+<span class="k">del</span> <span class="n">actors_less_raw</span><span class="p">,</span> <span class="n">actors_raw</span><span class="p">,</span> <span class="n">temp</span>
+
+<span class="c1">######################################################</span>
+<span class="c1">#            actors ranking and adding</span>
+<span class="c1">######################################################</span>
+
+<span class="k">for</span> <span class="n">title</span> <span class="ow">in</span> <span class="n">movie_and_roles</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">title</span> <span class="ow">in</span> <span class="n">movies</span><span class="p">:</span>
+        <span class="n">movies</span><span class="p">[</span><span class="n">title</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;cast&quot;</span><span class="p">:</span> <span class="n">movie_and_roles</span><span class="p">[</span><span class="n">title</span><span class="p">][</span><span class="s2">&quot;cast&quot;</span><span class="p">]})</span>
+
+<span class="k">print</span> <span class="n">movies</span><span class="p">[</span><span class="s2">&quot;Six-String Samurai (1998)&quot;</span><span class="p">]</span>
+
+<span class="k">for</span> <span class="n">title</span> <span class="ow">in</span> <span class="n">movies</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+    <span class="k">if</span> <span class="s2">&quot;cast&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">movies</span><span class="p">[</span><span class="n">title</span><span class="p">]:</span>
+        <span class="n">movies</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="n">rejectes_movies</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">title</span><span class="p">,</span><span class="s2">&quot;on_cast_no_cast&quot;</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">movies</span><span class="p">[</span><span class="n">title</span><span class="p">][</span><span class="s2">&quot;cast&quot;</span><span class="p">])</span> <span class="o">&lt;</span> <span class="n">actors_amount</span><span class="p">:</span>
+            <span class="n">movies</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+            <span class="n">rejectes_movies</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">title</span><span class="p">,</span> <span class="s2">&quot;on_cast_&lt;_6&quot;</span><span class="p">])</span>
+
+<span class="k">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">movies</span><span class="p">),</span> <span class="s2">&quot;amount of movies that have cast specified and with cast bigger then&quot;</span><span class="p">,</span> <span class="n">actors_amount</span><span class="p">,</span><span class="s2">&quot; actors&quot;</span>
+
+<span class="n">top_cast</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">title</span> <span class="ow">in</span> <span class="n">movies</span><span class="p">:</span>
+    <span class="n">cast</span> <span class="o">=</span> <span class="n">movies</span><span class="p">[</span><span class="n">title</span><span class="p">][</span><span class="s2">&quot;cast&quot;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cast</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">actors_amount</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">actor_entry</span> <span class="ow">in</span> <span class="n">cast</span><span class="p">:</span>
+            <span class="n">actor</span> <span class="o">=</span> <span class="n">actor_entry</span><span class="p">[</span><span class="s2">&quot;actor&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">actor</span> <span class="ow">in</span> <span class="n">top_actors</span><span class="p">:</span>
+                <span class="n">rank</span> <span class="o">=</span> <span class="n">top_actors</span><span class="p">[</span><span class="n">actor</span><span class="p">][</span><span class="s2">&quot;rank&quot;</span><span class="p">]</span>
+                <span class="n">top_cast</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;actor&quot;</span><span class="p">:</span> <span class="n">actor</span><span class="p">,</span> <span class="s2">&quot;rank&quot;</span><span class="p">:</span> <span class="n">rank</span><span class="p">,</span> <span class="s2">&quot;sex&quot;</span><span class="p">:</span> <span class="n">actor_entry</span><span class="p">[</span><span class="s2">&quot;sex&quot;</span><span class="p">]})</span>
+        <span class="n">movies</span><span class="p">[</span><span class="n">title</span><span class="p">][</span><span class="s2">&quot;cast&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">top_cast</span>
+        <span class="n">top_cast</span><span class="o">=</span><span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">title</span> <span class="ow">in</span> <span class="n">movies</span><span class="p">:</span>
+    <span class="n">cast</span> <span class="o">=</span> <span class="n">movies</span><span class="p">[</span><span class="n">title</span><span class="p">][</span><span class="s2">&quot;cast&quot;</span><span class="p">]</span>
+    <span class="n">cast_sorted</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">cast</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">k</span><span class="p">:</span> <span class="n">k</span><span class="p">[</span><span class="s1">&#39;rank&#39;</span><span class="p">])</span>
+    <span class="n">cast_sorted</span> <span class="o">=</span> <span class="n">cast_sorted</span><span class="p">[:</span><span class="n">actors_amount</span><span class="p">]</span>
+    <span class="c1"># if len(cast_sorted) == 0: print title</span>
+    <span class="c1"># print cast_sorted</span>
+    <span class="n">movies</span><span class="p">[</span><span class="n">title</span><span class="p">][</span><span class="s2">&quot;cast&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cast_sorted</span>
+
+<span class="k">print</span> <span class="n">movies</span><span class="p">[</span><span class="s2">&quot;Six-String Samurai (1998)&quot;</span><span class="p">]</span>
+
+<span class="k">for</span> <span class="n">title</span> <span class="ow">in</span> <span class="n">movies</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">movies</span><span class="p">[</span><span class="n">title</span><span class="p">][</span><span class="s2">&quot;cast&quot;</span><span class="p">])</span> <span class="o">&lt;</span> <span class="n">actors_amount</span><span class="p">:</span>
+        <span class="n">movies</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="n">rejectes_movies</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">title</span><span class="p">,</span> <span class="s2">&quot;on_cast_&lt;_6_2&quot;</span><span class="p">])</span>
+
+<span class="k">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">movies</span><span class="p">),</span> <span class="s2">&quot;amount of movies after adding cast and with&quot;</span><span class="p">,</span> <span class="n">actors_amount</span><span class="p">,</span><span class="s2">&quot;actors listed in top list&quot;</span>
+
+<span class="k">del</span> <span class="n">top_cast</span><span class="p">,</span> <span class="n">top_actors</span><span class="p">,</span> <span class="n">movie_and_roles</span>
+<span class="c1">######################################################</span>
+<span class="c1">#                   plot adding</span>
+<span class="c1">######################################################</span>
+
+<span class="n">plot_raw</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;IMDB_files_link/_filtered_data/plot.filtered&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">data_file</span><span class="p">:</span>
+    <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">data_file</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">reader</span><span class="p">:</span>
+        <span class="n">full_line</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="n">plot_raw</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">full_line</span><span class="p">)</span>
+
+<span class="n">plot_less_raw</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">temp</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">plot_raw</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">line</span> <span class="o">!=</span> <span class="s2">&quot;----&quot;</span><span class="p">:</span>
+        <span class="n">temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;BY&quot;</span><span class="p">)</span>
+        <span class="n">plot_less_raw</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="n">movie_plots</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">one_plot</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">plot_less_raw</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">entry</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">&quot;MV&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+            <span class="n">title</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot;MV: &quot;</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s2">&quot;PL&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+            <span class="n">one_plot</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot;PL: &quot;</span><span class="p">)[</span><span class="mi">2</span><span class="p">])</span>
+        <span class="k">if</span> <span class="s2">&quot;BY&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+            <span class="n">movie_plots</span><span class="p">[</span><span class="n">title</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;plot&quot;</span><span class="p">:</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">one_plot</span><span class="p">)}</span>
+            <span class="n">one_plot</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">break</span>
+
+<span class="k">for</span> <span class="n">title</span> <span class="ow">in</span> <span class="n">movies</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">title</span> <span class="ow">in</span> <span class="n">movie_plots</span><span class="p">:</span>
+        <span class="n">movies</span><span class="p">[</span><span class="n">title</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;plot&quot;</span><span class="p">:</span> <span class="n">movie_plots</span><span class="p">[</span><span class="n">title</span><span class="p">][</span><span class="s2">&quot;plot&quot;</span><span class="p">]})</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># print &quot;no plot for:&quot;, title</span>
+        <span class="n">movies</span><span class="p">[</span><span class="n">title</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;plot&quot;</span><span class="p">:</span> <span class="s2">&quot;no_info&quot;</span><span class="p">})</span>
+        <span class="n">rejectes_movies</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">title</span><span class="p">,</span> <span class="s2">&quot;on_plot&quot;</span><span class="p">])</span>
+
+<span class="k">del</span> <span class="n">movie_plots</span><span class="p">,</span> <span class="n">one_plot</span><span class="p">,</span> <span class="n">plot_less_raw</span><span class="p">,</span> <span class="n">plot_raw</span>
+
+<span class="c1">######################################################</span>
+<span class="c1">#                   runtime adding</span>
+<span class="c1">######################################################</span>
+
+<span class="n">runtimes</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;IMDB_files_link/_filtered_data/running-times.filtered&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">data_file</span><span class="p">:</span>
+    <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">data_file</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\r</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">reader</span><span class="p">:</span>
+        <span class="c1"># line variable here is a list of strings, so we join it into one string</span>
+        <span class="n">full_line</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="c1"># partition returns 3-tuple: (part_before_delimiter, delimiter, part_after_delimiter)</span>
+        <span class="n">parted</span> <span class="o">=</span> <span class="n">full_line</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">title</span> <span class="o">=</span> <span class="n">parted</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c1"># in the part_after_delimiter we delete all \t characters</span>
+        <span class="n">runtime</span> <span class="o">=</span> <span class="n">parted</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;:&quot;</span> <span class="ow">in</span> <span class="n">runtime</span><span class="p">:</span>
+            <span class="n">runtime</span> <span class="o">=</span> <span class="n">runtime</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s2">&quot;(&quot;</span> <span class="ow">in</span> <span class="n">runtime</span><span class="p">:</span>
+            <span class="n">runtime</span> <span class="o">=</span> <span class="n">runtime</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot;(&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">runtimes</span><span class="p">[</span><span class="n">title</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;runtime&quot;</span><span class="p">:</span> <span class="n">runtime</span><span class="p">}</span>
+
+<span class="k">for</span> <span class="n">title</span> <span class="ow">in</span> <span class="n">movies</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">title</span> <span class="ow">in</span> <span class="n">runtimes</span><span class="p">:</span>
+        <span class="n">movies</span><span class="p">[</span><span class="n">title</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;run-time&quot;</span><span class="p">:</span> <span class="n">runtimes</span><span class="p">[</span><span class="n">title</span><span class="p">][</span><span class="s2">&quot;runtime&quot;</span><span class="p">]})</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># print &quot;no runtime for:&quot;, title</span>
+        <span class="n">movies</span><span class="p">[</span><span class="n">title</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;run-time&quot;</span><span class="p">:</span> <span class="s2">&quot;no_info&quot;</span><span class="p">})</span>
+
+<span class="c1"># add video game filtering - only CoD: Modern Warfare 2</span>
+
+<span class="k">for</span> <span class="n">title</span> <span class="ow">in</span> <span class="n">movies</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+    <span class="k">if</span> <span class="s2">&quot;(VG)&quot;</span> <span class="ow">in</span> <span class="n">title</span><span class="p">:</span>
+        <span class="n">movies</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+
+<span class="k">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">movies</span><span class="p">),</span> <span class="s2">&quot;amount of movies after removing successful video games&quot;</span>
+
+
+<span class="n">fsl</span><span class="o">.</span><span class="n">save_to_file</span><span class="p">(</span><span class="n">movies</span><span class="p">,</span><span class="n">actors_amount</span><span class="p">)</span>
+
+<span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;files/_rejected.movies&#39;</span><span class="p">,</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">rejectes_movies</span><span class="p">:</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</body>
+</html>
