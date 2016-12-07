@@ -72,13 +72,16 @@
                         <a class="page-scroll" href="#Section5">Scripts Analysis</a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#Section6">Source</a>
+                        <a class="page-scroll" href="#Section55">Discussion</a>
                     </li>
                     <li>
-                        <a href="data_table/dataset_table.html" target="_blank">Our Dataset</a>
+                        <a class="page-scroll" href="#Section6">Source/Notebooks</a>
                     </li>
                     <li>
-                        <a href="http://kurser.dtu.dk/course/02805" target="_blank"><strong>Course 02805 DTU, 2016</strong></a>
+                        <a href="data_table/dataset_table.html" target="_blank">Dataset</a>
+                    </li>
+                    <li>
+                        <a href="http://kurser.dtu.dk/course/02805" target="_blank"><strong>02805 DTU, 2016</strong></a>
                     </li>
                 </ul>
             </div>
@@ -93,6 +96,7 @@
         <div class="container block">
             <div class="row block">
                 <div class="col-lg-12">
+                <br><br><br><br><br>
                     <h1>Social Graphs And Interactions: Final Assignment B</h1>
                     <p style="text-align: justify;">
                     This website contains the analysis of 4376 English language movies from the years 1986 to 2016. The data was downloaded through IMDb and additional information was acquired using Wikipedia’s APIs. The dataset contains 28 columns of information such as the movie’s director, top 6 billed actors, budget, gross, genre, rating and etc. Additionally to the IMDb dataset, 641 movie scripts were downloaded from <a href="www.imsdb.com">www.imsdb.com</a>. The movie scripts were stored individually in text files.
@@ -117,7 +121,7 @@
         <div class="container block">
             <div class="row block">
                 <div class="col-lg-12">
-                    <h1>About Dataset</h1>
+                    <h1>About Dataset - Motivation, Basic Stats and Analysis Part 1</h1>
 
                     <h3 style="text-align: left;"><a href="notebooks/html/dataset_analysis.html" target="_blank">See Dataset Notebook here</a></h3>
 
@@ -162,7 +166,7 @@
         <div class="container block">
             <div class="row block">
                 <div class="col-lg-12 block">
-                    <h1>Director Stats</h1>
+                    <h1>Directors - Basic Stats and Analysis Part 2</h1>
 
                     <h3 style="text-align: left;"><a href="notebooks/html/directors_analysis_graphs.html" target="_blank">See Directors Notebook here</a></h3>
 
@@ -178,12 +182,11 @@
         <div class="container block">
             <div class="row block">
                 <div class="col-lg-12 block">
-                    <h1>Actors Stats</h1>
+                    <h1>Actors - Basic Stats and Analysis Part 3</h1>
 
                     <h3 style="text-align: left;"><a href="notebooks/html/actors_analysis.html" target="_blank">See Actors Notebook here</a></h3>
 
                       <div class="container block" id="actors_graphs"></div>
-                      <p style="text-align: justify;">Some words here bla</p>
                       <pre style="text-align: left;">
 The most profitable actor (money what their movie earned (gross)): 
 
@@ -237,6 +240,10 @@ Toby Hemingway    0.000158
 Samuel Roukin     0.000217
 Dylan Moran       0.000217
 </pre>
+<br>
+                <p style="text-align: justify;">
+                  The most profitable actors in terms of gross was very well knwon famous characters like Tom Hanks Helena Bonham Carte or Tom Felton. All of them bring profit of 7 and more billion $. It is interesting though that they didn't raise the money of the movie many times. Anyone of them is in first 10 most profitable actors ratio- wise. It may come to conclusion that Samuel L. Jackson Bruce Willis and Tom Cruise who were on top three positions in most profitable ratio-wise ranking of actors are better actors who by their performance can increase the profit from the movie more. In terms of worst profitable actors there is no surprise. none of the well known actor is there (unfortunately) cause it would make a big disruption in hollywood world.
+                </p>
                 </div>
             </div>
         </div>
@@ -248,28 +255,55 @@ Dylan Moran       0.000217
         <div class="container block">
             <div class="row block">
                 <div class="col-lg-12 block">
-                    <h1>Networks</h1>
+                    <h1>Networks - Theory and Analysis Part 1</h1>
 
-                    <h3 style="text-align: left;"><a href="notebooks/html/_change_.html" target="_blank">See Networks Notebook here</a></h3>
-
+                    <h3 style="text-align: left;"><a href="notebooks/html/actors_directors_network_new.html" target="_blank">See Networks Notebook here</a></h3>
+                      <p style="text-align: justify;">
+                        For this project the key was to analyze the network of actors and directors. To do that we created two networks one consisted only of actors connected between each other based on the movies in which they were playing togeter as well as directors network where each of the node represented by the director were conected by edge (actor) with whom director was working with.
+                      </p>
                     <img src="img/actors_network.PNG">
 
                       <pre style="text-align: left;">
 Number of nodes: 4663
 Number of links: 62192
 
-Most frequent pairs of actors:
+Most frequent pairs of actors
 Adam Sandler and Rob Schneider {'weight': 13}
+Daniel Radcliffe and Tom Felton {'weight': 8}
 Jim Cummings and Frank Welker {'weight': 8}
 Kevin James and Adam Sandler {'weight': 8}
-Daniel Radcliffe and Tom Felton {'weight': 8}
 Adam Sandler and Steve Buscemi {'weight': 8}
 John Cusack and Joan Cusack {'weight': 7}
 Quentin Tarantino and Samuel L. Jackson {'weight': 6}
 Johnny Depp and Helena Bonham Carter {'weight': 6}
 George Clooney and Matt Damon {'weight': 6}
 Matt Damon and Ben Affleck {'weight': 6}
+Nicole Kidman and Tom Cruise {'weight': 6}
+James Franco and Seth Rogen {'weight': 6}
+Jonah Hill and Seth Rogen {'weight': 5}
+Kevin Smith and Ben Affleck {'weight': 5}
+Kevin Smith and Ethan Suplee {'weight': 5}
+Bill Nighy and Martin Freeman {'weight': 5}
+Daniel Radcliffe and Alan Rickman {'weight': 5}
+Samuel L. Jackson and Bruce Willis {'weight': 5}
+George Clooney and Brad Pitt {'weight': 5}
+Dolph Lundgren and Sylvester Stallone {'weight': 5}
+Danny Trejo and Steve Buscemi {'weight': 5}
+Matt Damon and Casey Affleck {'weight': 5}
+Matt Damon and Brad Pitt {'weight': 5}
+Paul Rudd and Seth Rogen {'weight': 5}
+Pamela Adlon and Mae Whitman {'weight': 5}
+Morgan Freeman and Ashley Judd {'weight': 5}
+Tom Felton and Alan Rickman {'weight': 5}
+Owen Wilson and Ben Stiller {'weight': 5}
+Hugh Jackman and Famke Janssen {'weight': 5}
+Danny Glover and Mel Gibson {'weight': 5}
                       </pre>
+                      <br>
+                      <p style="text-align: justify;">
+                      As we may observe the network of actors is consisted of 4663 nodes representing actors. They are connected between each other 62192 times. Interesting for us was to present who was playing the most frequent with whom. We may see that amount of actors who were playing together in many movies is very big wich means that the network is very dense. Recrod is Adam Sandler and Rob Schneider who were playing together 13 times. It is showing that they are good friends and this fact is also confirmed by the information which you may find on your own. Sandler is playing in almost every Schneider movie (Schneider is often porducer and actor in the same time).<br><br>
+                      Daniel Radcliffe and Tom Felton are also often together. This is mainly because of the Harry Potter movies in which they were playing. 8 movies 8 times they were together.
+                      </p>
 
                   <h3 style="text-align: left;">Betweenness centrality for actors network:</h3>
                     <p style="text-align: justify;">
@@ -284,6 +318,9 @@ Matt Damon and Ben Affleck {'weight': 6}
                       <strong>John Goodman</strong> with value of 0.00884639332967<br>
                       <strong>Christopher Walken</strong> with value of 0.00880429873827<br>
                       </p>
+                    <p style="text-align: justify;">
+                    In terms of betweenes centrality measurement the most central Actor is Samuel L. Jackson, second one is Bruce Willis and the 3rd one Frnak Welker. They all are quite significantly more central than the others. It is consecutively 8%, 3% and 2% from the 4th Nicolas Cage. It may be interesting to see what is the influence of it on relations between actors. But form where take this data to have opportunity to correlate? Maybe Twitter but it is another project.
+                    </p>
 
                   <h3 style="text-align: left;">Eigenvector centrality:</h3>
                     <p style="text-align: justify;">
@@ -299,9 +336,76 @@ Matt Damon and Ben Affleck {'weight': 6}
                       <strong>J.K. Simmons</strong> with value of 0.0827427545435<br>
                       </p>
                       <br>
-                    <p style="text-align: justify;">Description</p>
+                    <p style="text-align: justify;">
+                    The most central actors are Samuel L Jackson, Bruce willis and Matt Damon. It is almostthe same what betwennes centrality shown with the difference that Matt Damon has more influence on the network when we calculate eigenvector centrality. It means that he was playing with more actors with higher importance (more nodes) than Frank Walker who was 3rd in terms of betweenes centrality. It may be caused by the fact that Matt Damon was playing mainly in super production together with famous well known actors which had more influence on the network.
+                    </p>
+
+                    <h3 style="text-align: left;">Shortest paths</h3>
+                    <img src="img/shortest_path_directors.PNG"><br>
+                    <p style="text-align: justify;">
+                      Majority of the actors is only 3 handshakes from each other. That is ilustrating the most how dense the structure of actors netwrk is. The longest route is 6 which is still less than global average - 7. It means that the Holywood is very dense and everybody knows each other.
+                    </p>
+
+                    <h3 style="text-align: left;">Community Detection in the Actor's Network</h3>
+                    <p style="text-align: justify;">
+                    We group actors into the genre they appear most in to try to detect if the genres are good communities.
+                    </p>
+                    <pre style="text-align: left;">
+List of how many actors each genre has:
+Mystery: 23
+Romance: 2
+Sci-Fi: 3
+Family: 3
+Horror: 193
+Thriller: 4
+Crime: 151
+Drama: 970
+Fantasy: 9
+Animation: 20
+Music: 1
+Adventure: 183
+Action: 1345
+Comedy: 1628
+Documentary: 24
+War: 2
+Biography: 102
+-------------------------------
+Mystery modularity is 0.000208995908167
+Drama modularity is 0.0549944970595
+Sci-Fi modularity is -5.81719298243e-10
+Family modularity is 1.6078656768e-05
+Horror modularity is 0.00379229267609
+Crime modularity is 0.00207274801133
+Romance modularity is -2.5854191033e-10
+Fantasy modularity is 3.21532415008e-05
+Animation modularity is 0.000176845769169
+Music modularity is -6.46354775826e-11
+Adventure modularity is 0.00419451666767
+Action modularity is 0.14438718909
+Comedy modularity is 0.222783412029
+Documentary modularity is 0.000418022970634
+War modularity is 1.60789799454e-05
+Thriller modularity is -1.03416764132e-09
+Biography modularity is 0.000964081841727
+
+Modularity of the Actor's Network is 0.434056910962
+-------------------------------
+Modularity of the Actor's Network is 0.281269844569 according to the Louvain algorithm</pre>
+
+                    <br>
+                    <p style="text-align: justify;">
+                      Conclusion: Network of actors is very dense and there is a lot of communities but they are small compare to the network size so it is difficult to detect them. Our network had quite big modularity when we divide it according to the genres of the movies but ist is not the best classification comparing ot hte Louvain algorithm. We got modularity almost twice bigger than Louvain algorithm. It is also showing that our network is very complex and there is not simple one feature which differentiate dataset to the communities.
+                    </p>
+
                     <br><hr><br>
-                    <img src="img/directors_network.png">
+                    <!-- <img src="img/directors_network.png"> -->
+
+                    <h3 style="text-align: left;">Directors-Actors Network</h3>
+
+                    <p style="text-align: justify;">
+                      Analysis of another network consisted of Directors directly connected to the actors to check which director has the biggest community of actors.
+                      </p>
+
                     <pre style="text-align: left;">
 Number of nodes: 6448
 Number of links: 24539
@@ -326,10 +430,66 @@ Garry (I) Marshall with value of 65
 Robert Zemeckis with value of 64
 Tim (I) Burton with value of 64
 Martin (I) Scorsese with value of 63
-Ivan Reitman with value of 62
-                  </pre>  
+Ivan Reitman with value of 62</pre>  
+<br>
+                    <p style="text-align: justify;">
+                    Number of nodes in this network represents both directors as well as actors. The highest community of actors have Woody Allen but he directed the most - 31 movies. Second one is Steven Spielberg who directed 19 movies similiar to  Clint Eastwood who was third in our statistics. It is obvious that the number of movies which he directed but some of the directors prefer to work always with the same actors or create movies in series which has to have the same actors in different episodes.
+                    </p>
 
-                      <div class="container block" id="actors_networks_graphs"></div>
+                    <h3 style="text-align: left;">Directors-Actors Network - another approach</h3>
+
+                    <p style="text-align: justify;">
+                    Next network consist of directors as a nodes with <strong>edges between</strong> them representing actors.
+                    </p>
+                  <pre style="text-align: left;">
+Number of links: 121251
+Number of nodes: 1921</pre>
+                  <h3 style="text-align: left;">Betweenness centrality:</h3>
+
+                  <pre style="text-align: left;">
+Woody Allen with value of 0.0187819014826
+Ridley Scott with value of 0.0151728436898
+Steven Spielberg with value of 0.0125917903898
+Clint Eastwood with value of 0.0111515532796
+Ron (I) Howard with value of 0.0105641215123
+Oliver (I) Stone with value of 0.010556704873
+Tony (I) Scott with value of 0.00922967454605
+Barry (I) Levinson with value of 0.00885625115466
+Walter (I) Hill with value of 0.00864140195794
+Joel Schumacher with value of 0.00863278629818</pre>
+<br>
+                    <p style="text-align: justify;">
+                    The results of betweenes centrality measurement definitely makes sense based on the finding above. Woody Allen has the highest betweenes centrality becasue of the fact that his network of actors is the biggest. He is the most central Director. THe same is with the other Directors who are in the top 10 of most central directors. They are all directors who produced a lot of movies. But based on that we can say that our data are a bit different and Ridley Scott who is not the second director in terms of amount of actors in the network is the second most central director. It means that the actors who he was working with are more central which means that they have potentially stronger network and are more known in this Hollywood world.
+                    </p>
+
+                  <h3 style="text-align: left;">Eigenvector centrality :</h3>
+                  <pre style="text-align: left;">
+Woody Allen with value of 0.0950294577375
+Steven Spielberg with value of 0.0912651602567
+Barry (I) Levinson with value of 0.0894931214361
+Oliver (I) Stone with value of 0.0880117134816
+Ron (I) Howard with value of 0.0870836666393
+Ridley Scott with value of 0.0865413671453
+Tony (I) Scott with value of 0.0833347931727
+Clint Eastwood with value of 0.0819358447652
+Joel Schumacher with value of 0.0816934582326
+Martin (I) Scorsese with value of 0.0814357425669
+Steven Soderbergh with value of 0.0787542127529
+Michael (I) Bay with value of 0.0775885608277
+Ethan Coen with value of 0.0765195862013
+Spike Lee with value of 0.0734792483432
+Robert Zemeckis with value of 0.0733179997185
+Mike (I) Nichols with value of 0.0731948556936
+Tim (I) Burton with value of 0.0714182947515
+Ivan Reitman with value of 0.0710576774678
+Rob Reiner with value of 0.070045195902
+Walter (I) Hill with value of 0.06871236156</pre>
+<br>
+                    <p style="text-align: justify;">
+                   The measure of eigenvector centrality seems to show us that still Woody Allen is the most important director in hollywood and his persona has the most influence on the whole network. The second one is Steven Spielberg as well as Barry Levinson who is third in terms of eigenvector centrality. Ridley Scott is 6th. Key finding is also that the differences between eigenvector centralities between 1st and 20th director are minimal around 2.5% which is not a lot in terms of such a dense network.
+                    </p>
+
+                      <!-- <div class="container block" id="actors_networks_graphs"></div> -->
                 </div>
             </div>
         </div>
@@ -341,7 +501,7 @@ Ivan Reitman with value of 62
         <div class="container block">
             <div class="row block">
                 <div class="col-lg-12 block">
-                    <h1>Scripts Analysis</h1>
+                    <h1>Scripts - Theory and Analysis Part 2</h1>
 
                     <h3 style="text-align: left;"><a href="notebooks/html/movie_scripts_analysis.html" target="_blank">See Scripts Notebook here</a></h3>
 
@@ -496,8 +656,36 @@ Comedy: 5.59980973298</pre>
                           </a>
 
                         </div>
-
+                        <p style="text-align: justify;">
+                          The best representation of a genre is clearly the crime genre, which is a lot more specific than other genres which are displayed here. Words like gun, cell, vault, guard, casino, shotgun and profanities (fuck) are common in the image, which really reflects the themes of crime movies.<br><br>
+                          The image for the action genre includes many words related to weapons, with the word sword the most obvious one. Words related to transport and creatures (dragon, alien and vampire) are also common. All in all, a fairly good representation of the action genre.<br><br>
+                          The comedy genre has the problem of being a very broad genre, many movies can fall into that category. The word nun is somehow very popular within the movies in the dataset that make up the comedy genre and profanites have a strong presence as well.
+                          The same thing can be described of the drama genre. Movies that are consider drama can have many different themes and subjects, so words related to transport stand out.<br><br>
+                          Other genres have considerable less words to play with and that is reflected in their wordclouds, movies within the genres have much more weight in the images.
+                        </p>
                       </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    </div>
+    <!-- Discussion -->
+    <div class="block">
+    <section id="Section55" class="normal-section block">
+        <div class="container block">
+            <div class="row block">
+                <div class="col-lg-12 block">
+                <hr>
+                    <h1>Discussion</h1>
+                    <p style="text-align: justify;">
+                      To start with it is good to underline that creation of large dataset with very detailed information was a big success. Merging a lot of different sources like IMDb, Wikipedia, IMSDb using APIs or scraping the information went very well. It was a great success to clean messy data sets of different parameters into one file which could be further analyzed and used in study.<br><br>
+                      Another thing which went well was analysis of the network. The fact that we asked a lot of specific questions connected with profit and the movie business, on which we could find the answers during the analysis of the dataset. Process of analysing actors and directors separately to cope with conclusions about movies was performed well.<br><br>
+                      Network part and the key findings like which actors are playing in the most movies together, the most central actors and directors gave a lot of information about the network on its own. After the analysis we found that the most famous actors and directors are the most central people in the whole network. The outliers in our networks, where unknown actors and directors.<br><br>
+                      The process of sentiment analysis of the movie scripts gave us interesting information about which actors are more starring in positive or negative movies. Furthermore, the sentiment of a movie is correlated with the genre of the movie. Our findings seems to follow the assumptions that comedy films tend to have higher sentiment score (be more positive) than action and drama films.
+                      It should be noted that we only had 641 movie scripts to work with, which is drastically fewer movies than in the total dataset (4376 titles). Therefore, the text analysis could be improved if more movie scripts are acquired. Nevertheless, we got some interesting data from it and our findings supported our theory that movies tend to have more positive or negative words based on its genre.<br><br>
+                      Future work would be to use English subtitles for the movies instead of the movie scripts. Almost every English language movie has subtitles and there are large databases for subtitles on the internet. The difference is that movie scripts also include descriptions of scenes, while subtitles only have the dialogue. It could be interesting analysis and would probably help with the word clouds for different genre to have more words to play with.
+                    </p>
+
                 </div>
             </div>
         </div>
@@ -509,16 +697,17 @@ Comedy: 5.59980973298</pre>
         <div class="container block">
             <div class="row block">
                 <div class="col-lg-12 block">
+                <hr>
                     <h1>Source Code</h1>
                     <h2 style="text-align: left;">All notebooks:</h2>
                     <p align="left">
                     <strong>All notebooks in order they appeared on the web site:</strong><br>
                     <strong>(please allow some time to load as notebooks are pretty big)</strong><br>
-                    <a href="notebooks/html/dataset_analysis.html" target="_blank">Dataset Notebook</a><br>
-                    <a href="notebooks/html/directors_analysis_graphs.html" target="_blank">Directors Notebook</a><br>
-                    <a href="notebooks/html/actors_analysis.html" target="_blank">Actors Notebook</a><br>
-                    <a href="notebooks/html/_change_.html" target="_blank">Networks Notebook</a><br>
-                    <a href="notebooks/html/movie_scripts_analysis.html" target="_blank">Scripts Notebook</a><br>
+                    <a href="notebooks/html/dataset_analysis.html" target="_blank">Dataset Notebook - Motivation, Basic Stats and Analysis Part 1</a><br>
+                    <a href="notebooks/html/directors_analysis_graphs.html" target="_blank">Directors Notebook - Basic Stats and Analysis Part 2</a><br>
+                    <a href="notebooks/html/actors_analysis.html" target="_blank">Actors Notebook - Basic Stats and Analysis Part 3</a><br>
+                    <a href="notebooks/html/actors_directors_network_new.html" target="_blank">Networks Notebook - Theory and Analysis Part 1</a><br>
+                    <a href="notebooks/html/movie_scripts_analysis.html" target="_blank">Scripts Notebook - Theory and Analysis Part 2</a><br>
                     </p>
                     <h2 style="text-align: left;">Source code:</h2>
                     <p align="left">
